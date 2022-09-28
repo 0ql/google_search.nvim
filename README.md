@@ -13,7 +13,7 @@ use { "0ql/google_search.nvim", requires = 'MunifTanjim/nui.nvim' }
 
 Running
 ```
-:lua require("google_search")()
+:GS
 ```
 triggers the prompt.
 
