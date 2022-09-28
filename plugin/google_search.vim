@@ -1,1 +1,1 @@
-command! gs lua require("google_search")()
+command! GS lua require("google_search")()
