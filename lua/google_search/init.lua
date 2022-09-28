@@ -27,7 +27,7 @@ function Search:items(options)
 	end, 0)
 end
 
-local function greet()
+local function google_search()
 	local input_options = {
 		focusable = true,
 		position = { row = 0, col = "100%" },
@@ -111,4 +111,4 @@ local function greet()
 	vim.api.nvim_set_current_win(input.winid)
 end
 
-return greet
+return google_search
