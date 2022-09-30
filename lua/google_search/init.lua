@@ -27,6 +27,26 @@ function Search:items(options)
 	end, 0)
 end
 
+-- Credit where credit is due
+-- https://gist.github.com/liukun/f9ce7d6d14fa45fe9b924a3eed5c3d99
+local char_to_hex = function(c)
+	return string.format("%%%02X", string.byte(c))
+end
+
+local function urlencode(url)
+	if url == nil then
+		return
+	end
+	url = url:gsub("\n", "\r\n")
+	url = url:gsub("([^%w ])", char_to_hex)
+	url = url:gsub(" ", "+")
+	return url
+end
+
+local function submit(value)
+	io.popen("xdg-open https://google.com/search?q=" .. urlencode(value))
+end
+
 local function google_search()
 	local input_options = {
 		focusable = true,
@@ -48,15 +68,13 @@ local function google_search()
 
 	local input = Input(input_options, {
 		prompt = " ",
-		on_submit = function(value)
-			io.popen("xdg-open https://google.com/search?q=" .. value)
-		end,
+		on_submit = submit,
 		on_change = function(value)
 			local co = coroutine.create(function()
 				if value == '' then return end
 				local handle = io.popen("curl -s 'https://google.com/complete/search?output=firefox&q=" ..
-					-- TODO: Proper URL encoding
-					string.gsub(value, " ", "%%20") .. "'")
+					urlencode(value)
+					.. "'")
 				local result = handle:read("*a")
 				local options = {}
 				for hit in string.gmatch(result, "\"([^,\n\t:]+)\"") do
@@ -78,7 +96,7 @@ local function google_search()
 	search:map("n", "<CR>", function()
 		local linenr = vim.api.nvim_win_get_cursor(search.winid)[1]
 		local target = search.options[linenr]
-		io.popen("xdg-open https://google.com/search?q=" .. target)
+		submit(target)
 	end)
 
 	input:map("i", "<Tab>", function()

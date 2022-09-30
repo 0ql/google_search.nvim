@@ -16,8 +16,3 @@ Running
 :GS
 ```
 triggers the prompt.
-
-## Issues
-
-- Due to no proper URL encoding for search recommendations and the search itself special characters are currently not working.
-- special chars are also not showing properly in the search recommendations
